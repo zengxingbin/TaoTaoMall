@@ -1,0 +1,69 @@
+package com.taotao.content.service.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.taotao.common.pojo.EasyUITreeNode;
+import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.content.service.ContentCategoryService;
+import com.taotao.mapper.TbContentCategoryMapper;
+import com.taotao.pojo.TbContentCategory;
+import com.taotao.pojo.TbContentCategoryExample;
+import com.taotao.pojo.TbContentCategoryExample.Criteria;
+
+@Service
+public class ContentCategoryServiceImpl implements ContentCategoryService {
+    //调用dao
+    @Autowired
+    private TbContentCategoryMapper tbContentCategoryMapper;
+    @Override
+    public List<EasyUITreeNode> getContentCategoryList(long parentId) {
+        //设置查询条件
+        TbContentCategoryExample example = new TbContentCategoryExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        //执行查询
+        List<TbContentCategory> list = tbContentCategoryMapper.selectByExample(example);
+        //创建EasyUITreeNode的list集合
+        List<EasyUITreeNode> resultList = new ArrayList<>();
+        //遍历list集合
+        for(TbContentCategory tbContentCategory : list) {
+            //创建EasyUITreeNode,信息封装到EasyUITreeNode中
+            EasyUITreeNode node = new EasyUITreeNode();
+            node.setId(tbContentCategory.getId());
+            node.setText(tbContentCategory.getName());
+            node.setState(tbContentCategory.getIsParent() ? "closed":"open");
+            //添加EasyUITreeNode到resultList中
+            resultList.add(node);
+        }
+        return resultList;
+    }
+    @Override
+    public TaotaoResult addContentCatetory(long parentId, String name) {
+        //创建ContentCategory,补全信息后插入到数据库
+        TbContentCategory tbContentCategory = new TbContentCategory();
+        tbContentCategory.setParentId(parentId);
+        tbContentCategory.setName(name);
+        tbContentCategory.setIsParent(false);
+        tbContentCategory.setSortOrder(1);
+        //1、表示正常
+        tbContentCategory.setStatus(1);
+        tbContentCategory.setUpdated(new Date());
+        tbContentCategory.setCreated(new Date());
+        //插入到数据库
+        tbContentCategoryMapper.insert(tbContentCategory);
+        //获取父节点，判断父节点状态
+        TbContentCategory parent = tbContentCategoryMapper.selectByPrimaryKey(parentId);
+        if(!parent.getIsParent()) {
+            parent.setIsParent(true);
+            //更新到数据库
+            tbContentCategoryMapper.updateByPrimaryKey(parent);
+        }
+        return TaotaoResult.ok(tbContentCategory);
+    }
+
+}
