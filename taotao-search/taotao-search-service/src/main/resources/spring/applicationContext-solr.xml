@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+	
+	<!-- 创建SolrServer -->
+    <!-- 单机版 -->
+    <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+       <!-- 构造参数注入 -->
+       <constructor-arg name="baseURL" value="http://192.168.19.99:8080/solr"></constructor-arg>
+    </bean>
+    <!-- 集群版 --><!-- 单机和集群版不能共存，因为两者都是solrServer的子类，注入时会引发不确定性，不知道注入哪个，所以会报错 -->
+    <!-- <bean id="cloudSolrServer" class="org.apache.solr.client.solrj.impl.CloudSolrServer">
+        <constructor-arg name="zkHost" value="192.168.19.99:2182,192.168.19.99:2183,192.168.19.99:2184"></constructor-arg>
+        <property name="defaultCollection" value="collection2"/>
+    </bean> -->
+	
+</beans>
