@@ -3,7 +3,16 @@ package com.taotao.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
@@ -23,6 +32,12 @@ public class ItemServiceImpl implements ItemService{
     TbItemMapper tbItemMapper;
     @Autowired
     TbItemDescMapper tbItemDescMapper;
+    //注入jmsTemplate
+    @Autowired
+    private JmsTemplate jmsTemplate;
+    //注入Destination
+    @Resource(name="itemAddTopic")
+    private Destination destination;
     public TbItem getItemById(Long itemId) {
         TbItem tbItem = tbItemMapper.selectByPrimaryKey(itemId);
         return tbItem;
@@ -45,7 +60,7 @@ public class ItemServiceImpl implements ItemService{
     public TaotaoResult addItem(TbItem tbItem, String desc) {
         //补全商品属性
         //创建商品id
-        long itemId = IDUtils.genItemId();
+        final long itemId = IDUtils.genItemId();
         tbItem.setCid(itemId);
         tbItem.setId(itemId);
         //添加商品状态，1-正常2-下架3-删除
@@ -63,6 +78,17 @@ public class ItemServiceImpl implements ItemService{
         tbItemDesc.setUpdated(new Date());
         //插入到数据库表中
         tbItemDescMapper.insert(tbItemDesc);
+        //添加商品后发送消息，同步索引库
+        jmsTemplate.send(destination,new MessageCreator() {
+            
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                //发送的是商品id
+                TextMessage textMessage = session.createTextMessage(itemId + "");
+                return textMessage;
+                
+            }
+        });
         return TaotaoResult.ok();
     }
     
