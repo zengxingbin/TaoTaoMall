@@ -5,3 +5,4 @@ com\taotao\utils\FastDFSClient.class
 com\taotao\controller\PictureController.class
 com\taotao\controller\ContentController.class
 com\taotao\controller\PageController.class
+com\taotao\controller\ImportIndexContreller.class
