@@ -5,8 +5,8 @@ var TT = TAOTAO = {
 			return ;
 		}
 		$.ajax({
-			url : "http://localhost:8084/user/token/" + _ticket,
-			dataType : "jsonp",
+			url : "http://localhost:8088/user/token/" + _ticket,
+			dataType : "jsonp",//dataType:"jsonp"时，使用的jquey的ajax请求，会自动帮你定义并初始化好一个callback方法，并将callback方法名发送到服务端
 			type : "GET",
 			success : function(data){
 				if(data.status == 200){
