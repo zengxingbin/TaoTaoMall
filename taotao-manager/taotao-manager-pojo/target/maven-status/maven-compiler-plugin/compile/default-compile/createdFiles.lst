@@ -1,3 +1,4 @@
+com\taotao\pojo\TbCartExample$Criteria.class
 com\taotao\pojo\TbItem.class
 com\taotao\pojo\TbItemExample.class
 com\taotao\pojo\TbOrderExample$Criterion.class
@@ -12,13 +13,16 @@ com\taotao\pojo\TbOrderItemExample$GeneratedCriteria.class
 com\taotao\pojo\TbItemCatExample$Criteria.class
 com\taotao\pojo\TbUser.class
 com\taotao\pojo\TbItemCat.class
+com\taotao\pojo\TbCartExample$GeneratedCriteria.class
 com\taotao\pojo\TbContent.class
 com\taotao\pojo\TbOrderItem.class
 com\taotao\pojo\TbItemDescExample.class
+com\taotao\pojo\TbCartExample$Criterion.class
 com\taotao\pojo\TbContentExample.class
 com\taotao\pojo\TbItemParamExample$GeneratedCriteria.class
 com\taotao\pojo\TbOrderItemExample$Criterion.class
 com\taotao\pojo\TbContentCategoryExample.class
+com\taotao\pojo\TbCartExample.class
 com\taotao\pojo\TbItemExample$GeneratedCriteria.class
 com\taotao\pojo\TbUserExample$Criterion.class
 com\taotao\pojo\TbItemDescExample$Criterion.class
@@ -27,6 +31,7 @@ com\taotao\pojo\TbOrderExample.class
 com\taotao\pojo\TbItemParamExample.class
 com\taotao\pojo\TbItemParamItemExample$GeneratedCriteria.class
 com\taotao\pojo\TbItemExample$Criteria.class
+com\taotao\pojo\TbCart.class
 com\taotao\pojo\TbOrderExample$GeneratedCriteria.class
 com\taotao\pojo\TbOrder.class
 com\taotao\pojo\TbItemParam.class

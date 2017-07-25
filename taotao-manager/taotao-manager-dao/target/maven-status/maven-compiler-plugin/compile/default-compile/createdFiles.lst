@@ -1,5 +1,6 @@
 com\taotao\mapper\TbItemDescMapper.class
 com\taotao\mapper\TbUserMapper.class
+com\taotao\mapper\TbCartMapper.class
 com\taotao\mapper\TbContentMapper.class
 com\taotao\mapper\TbItemParamItemMapper.class
 com\taotao\mapper\TbOrderShippingMapper.class

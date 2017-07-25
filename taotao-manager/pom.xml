@@ -33,6 +33,10 @@
                 <configuration>
                     <port>8080</port>
                     <path>/</path>
+                    <!-- tomcat热部署，使用maven的插件 -->
+                    <!-- <url>http://192.168.19.99:8080/manager/text/</url>
+                    <username>tomcat</username>
+                    <password>123</password> -->
                 </configuration>
             </plugin>
         </plugins>

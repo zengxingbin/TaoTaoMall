@@ -1,2 +1,5 @@
 E:\MyStudyFile\java\TaoTaoMall\taotao-manager\taotao-manager-service\src\main\java\com\taotao\service\impl\ItemServiceImpl.java
+E:\MyStudyFile\java\TaoTaoMall\taotao-manager\taotao-manager-service\src\main\java\com\taotao\jedis\JedisClient.java
+E:\MyStudyFile\java\TaoTaoMall\taotao-manager\taotao-manager-service\src\main\java\com\taotao\jedis\JedisClientCluster.java
 E:\MyStudyFile\java\TaoTaoMall\taotao-manager\taotao-manager-service\src\main\java\com\taotao\service\impl\ItemCatServiceImpl.java
+E:\MyStudyFile\java\TaoTaoMall\taotao-manager\taotao-manager-service\src\main\java\com\taotao\jedis\JedisClientPool.java

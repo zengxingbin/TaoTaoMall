@@ -10,7 +10,9 @@ import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.EasyUIDatagridResult;
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.jedis.JedisClient;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
@@ -26,6 +29,7 @@ import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemExample;
 import com.taotao.service.ItemService;
 import com.taotao.utils.IDUtils;
+import com.taotao.utils.JsonUtils;
 @Service
 public class ItemServiceImpl implements ItemService{
     @Autowired
@@ -38,8 +42,35 @@ public class ItemServiceImpl implements ItemService{
     //注入Destination
     @Resource(name="itemAddTopic")
     private Destination destination;
+    //注入jedis
+    @Autowired
+    private JedisClient jedisClient;
+    @Value("${ITEM_INFO}")
+    private String ITEM_INFO;
+    @Value("${EXPIRE_TIME}")
+    private int EXPIRE_TIME;
     public TbItem getItemById(Long itemId) {
+        //查询数据库之前先查询redis缓存
+        try {
+            String json = jedisClient.get(ITEM_INFO + ":" + itemId + ":" + "BASE");
+            //将json串转化为object
+            if(StringUtils.isNotBlank(json)) {
+                TbItem tbItem = JsonUtils.jsonToPojo(json, TbItem.class);
+                return tbItem;
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        //缓存中不存在再查询数据库，并把查询到的商品信息放入缓存中
         TbItem tbItem = tbItemMapper.selectByPrimaryKey(itemId);
+        try {
+            //放入缓存中
+            jedisClient.set(ITEM_INFO + ":" + itemId + ":" + "BASE",JsonUtils.objectToJson(tbItem));
+            //设置redis中key的失效时间
+            jedisClient.expire(ITEM_INFO + ":" + itemId + ":" + "BASE",EXPIRE_TIME);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
         return tbItem;
     }
     @Override
@@ -91,6 +122,28 @@ public class ItemServiceImpl implements ItemService{
         });
         return TaotaoResult.ok();
     }
-    
-
+    @Override
+    public TbItemDesc getItemDescById(Long itemId) {
+        //查询数据库之前先查询缓存
+        try {
+            String json = jedisClient.get(ITEM_INFO + ":" + itemId + ":" + "DESC");
+            if(StringUtils.isNotBlank(json)) {
+                TbItemDesc tbItemDesc = JsonUtils.jsonToPojo(json, TbItemDesc.class);
+                return tbItemDesc;
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        //根据商品商品Id查询商品描述
+        TbItemDesc tbItemDesc = tbItemDescMapper.selectByPrimaryKey(itemId);
+        //放入缓存中
+        try {
+            jedisClient.set(ITEM_INFO + ":" + itemId + ":" + "DESC", JsonUtils.objectToJson(tbItemDesc));
+            //设置key的过期时间
+            jedisClient.expire(ITEM_INFO + ":" + itemId + ":" + "DESC", EXPIRE_TIME);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return tbItemDesc;
+    }
 }
