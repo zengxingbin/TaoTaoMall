@@ -1,12 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <script type="text/javascript" src="/js/base-v1.js" charset="utf-8"></script>
 <!--shortcut start-->
-<jsp:include page="shortcut.jsp" />
+<#include "shortcut.ftl" />
 <!--shortcut end-->
 <div id="o-header-2013">
 	<div class="w" id="header-2013">
-		<div id="logo-2013" class="ld"><a href="http://localhost:8082" hidefocus="true" clstag="homepage|keycount|home2013|02a"><b></b><img src="/images/taotao-logo.gif" width="270" height="60" alt="淘淘"></a></div>
+		<div id="logo-2013" class="ld"><a href="/" hidefocus="true" clstag="homepage|keycount|home2013|02a"><b></b><img src="/images/taotao-logo.gif" width="270" height="60" alt="淘淘"></a></div>
 		<!--logo end-->
 		<div id="search-2013">
 			<div class="i-search ld">

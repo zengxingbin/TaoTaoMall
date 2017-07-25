@@ -22,10 +22,15 @@
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    <!-- spring和freemarker整合 -->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/ftl"></property>
+        <property name="defaultEncoding" value="utf-8"></property>
+    </bean>
     <!-- 配置包扫描器，扫描@Controller注解的类 -->
     <context:component-scan base-package="com.taotao.item.controller"/>
     <!-- 引用dubbo服务 -->
     <dubbo:application name="taotao-manager-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.19.99:2181"/>    
-    <!-- <dubbo:reference interface="com.taotao.content.service.ContentService" id="contentService" /> -->
+    <dubbo:reference interface="com.taotao.service.ItemService" id="itemService" />
 </beans>      
